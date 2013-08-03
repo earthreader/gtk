@@ -3,6 +3,7 @@ import sys
 from gi.repository.Gtk import (Application, ApplicationWindow, Box,
                                CellRendererText, TreeStore, TreeView,
                                TreeViewColumn)
+from gi.repository.WebKit import WebView
 
 
 APP_ID = 'io.github.earthreader.gtk'
@@ -17,10 +18,14 @@ class EarthReaderApp(Application):
         self.connect('activate', self.on_activate)
 
     def on_activate(self, app):
-        self.window = ReaderWindow(application=self)
+        self.window = ReaderWindow(
+            application=self,
+            hide_titlebar_when_maximized=True
+        )
         self.window.set_default_size(600, 400)
         self.window.maximize()
         self.window.show_all()
+        self.window.content_view.load_uri('https://github.com/earthreader')
 
 
 class ReaderWindow(ApplicationWindow):
@@ -30,7 +35,7 @@ class ReaderWindow(ApplicationWindow):
         self.box = Box(spacing=0)
         self.add(self.box)
         feeds_store = dummy_feeds()
-        feeds_sidebar = TreeView(feeds_store)
+        self.feeds_sidebar = TreeView(feeds_store)
         cell_renderer = CellRendererText()
         column = TreeViewColumn('Title', cell_renderer, text=0)
         def cell_data_func(tree_view_column, renderer, model, tree_iter, *args):
@@ -39,13 +44,15 @@ class ReaderWindow(ApplicationWindow):
             else:
                 renderer.set_property('cell-background', None)
         column.set_cell_data_func(cell_renderer, cell_data_func)
-        feeds_sidebar.append_column(column)
+        self.feeds_sidebar.append_column(column)
         from gi.repository import Gtk
-        self.box.pack_start(feeds_sidebar, expand=True, fill=True, padding=0)
+        self.box.pack_start(self.feeds_sidebar,
+                            expand=True, fill=True, padding=0)
         b = Gtk.Button(label='B')
         self.box.pack_start(b, expand=True, fill=True, padding=0)
-        c = Gtk.Button(label='C')
-        self.box.pack_start(c, expand=True, fill=True, padding=0)
+        self.content_view = WebView()
+        self.box.pack_start(self.content_view,
+                            expand=True, fill=True, padding=0)
 
 
 def dummy_feeds():
