@@ -1,8 +1,8 @@
 import sys
 
 from gi.repository.Gtk import (Application, ApplicationWindow, Box,
-                               CellRendererText, TreeStore, TreeView,
-                               TreeViewColumn)
+                               CellRendererText, ListStore, TreeStore,
+                               TreeView, TreeViewColumn)
 from gi.repository.WebKit import WebView
 
 
@@ -37,19 +37,22 @@ class ReaderWindow(ApplicationWindow):
         feeds_store = dummy_feeds()
         self.feeds_sidebar = TreeView(feeds_store)
         cell_renderer = CellRendererText()
-        column = TreeViewColumn('Title', cell_renderer, text=0)
+        feed_column = TreeViewColumn('Title', cell_renderer, text=0)
         def cell_data_func(tree_view_column, renderer, model, tree_iter, *args):
             if model[tree_iter][1] == 'category':
                 renderer.set_property('cell-background', 'silver')
             else:
                 renderer.set_property('cell-background', None)
-        column.set_cell_data_func(cell_renderer, cell_data_func)
-        self.feeds_sidebar.append_column(column)
-        from gi.repository import Gtk
+        feed_column.set_cell_data_func(cell_renderer, cell_data_func)
+        self.feeds_sidebar.append_column(feed_column)
         self.box.pack_start(self.feeds_sidebar,
                             expand=True, fill=True, padding=0)
-        b = Gtk.Button(label='B')
-        self.box.pack_start(b, expand=True, fill=True, padding=0)
+        entries_store = dummy_entries()
+        entry_column = TreeViewColumn('Title', CellRendererText(), text=0)
+        self.entry_list_view = TreeView(entries_store)
+        self.entry_list_view.append_column(entry_column)
+        self.box.pack_start(self.entry_list_view,
+                            expand=True, fill=True, padding=0)
         self.content_view = WebView()
         self.box.pack_start(self.content_view,
                             expand=True, fill=True, padding=0)
@@ -63,6 +66,14 @@ def dummy_feeds():
     friends = store.append(None, ('Friends', 'category'))
     store.append(friends, ('Null Model', 'feed'))
     store.append(friends, ('Mearie Journal', 'feed'))
+    return store
+
+
+def dummy_entries():
+    store = ListStore(str)
+    store.append(('First entry',))
+    store.append(('Second entry',))
+    store.append(('Third entry',))
     return store
 
 
