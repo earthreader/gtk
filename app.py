@@ -3,7 +3,7 @@ import sys
 from gi.repository.Gtk import (Application, ApplicationWindow, Box,
                                CellRendererText, ListStore, TreeStore,
                                TreeView, TreeViewColumn)
-from gi.repository.WebKit import WebView
+from gi.repository.WebKit2 import WebView
 
 
 APP_ID = 'io.github.earthreader.gtk'
