@@ -1,5 +1,8 @@
+import os
+import os.path
 import sys
 
+from gi.repository.GdkPixbuf import Pixbuf
 from gi.repository.Gtk import (Application, ApplicationWindow, Box,
                                CellRendererText, ListStore, TreeStore,
                                TreeView, TreeViewColumn)
@@ -7,6 +10,10 @@ from gi.repository.WebKit2 import WebView
 
 
 APP_ID = 'org.earthreader.gtk'
+ICON_LIST = [
+    Pixbuf.new_from_file(os.path.join(os.path.dirname(__file__), 'icons', n))
+    for n in os.listdir(os.path.join(os.path.dirname(__file__), 'icons'))
+]
 
 
 class EarthReaderApp(Application):
@@ -35,6 +42,7 @@ class ReaderWindow(ApplicationWindow):
     def __init__(self, **kwargs):
         super(ReaderWindow, self).__init__(title='Eearth Reader', **kwargs)
         self.set_wmclass('Earth Reader', 'Earth Reader')
+        self.set_icon_list(ICON_LIST)
         self.box = Box(spacing=0)
         self.add(self.box)
         feeds_store = dummy_feeds()
