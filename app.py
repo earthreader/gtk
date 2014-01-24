@@ -6,7 +6,7 @@ from gi.repository.Gtk import (Application, ApplicationWindow, Box,
 from gi.repository.WebKit2 import WebView
 
 
-APP_ID = 'io.github.earthreader.gtk'
+APP_ID = 'org.earthreader.gtk'
 
 
 class EarthReaderApp(Application):
@@ -25,7 +25,7 @@ class EarthReaderApp(Application):
         self.window.set_default_size(600, 400)
         self.window.maximize()
         self.window.show_all()
-        self.window.content_view.load_uri('https://github.com/earthreader')
+        self.window.content_view.load_uri('http://earthreader.org/')
 
 
 class ReaderWindow(ApplicationWindow):
