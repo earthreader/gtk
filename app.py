@@ -30,8 +30,11 @@ class EarthReaderApp(Application):
 
 class ReaderWindow(ApplicationWindow):
 
+    __gtype_name__ = 'ReaderWindow'
+
     def __init__(self, **kwargs):
         super(ReaderWindow, self).__init__(title='Eearth Reader', **kwargs)
+        self.set_wmclass('Earth Reader', 'Earth Reader')
         self.box = Box(spacing=0)
         self.add(self.box)
         feeds_store = dummy_feeds()
