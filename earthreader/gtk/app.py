@@ -67,11 +67,13 @@ class ReaderWindow(ApplicationWindow):
         self.subscription_list = TreeView(subscriptions)
         cell_renderer = CellRendererText()
         subscription_column = TreeViewColumn('Title', cell_renderer, text=0)
-        def cell_data_func(tree_view_column, renderer, model, tree_iter, *args):
+
+        def cell_data_func(column, renderer, model, tree_iter, *args):
             if isinstance(model[tree_iter], Category):
                 renderer.set_property('cell-background', 'silver')
             else:
                 renderer.set_property('cell-background', None)
+
         subscription_column.set_cell_data_func(cell_renderer, cell_data_func)
         self.subscription_list.append_column(subscription_column)
         self.subscriptions_sidebar.add(self.subscription_list)
