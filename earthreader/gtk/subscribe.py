@@ -28,10 +28,7 @@ class SubscriptionTreeModel(Object, TreeModel):
         super(SubscriptionTreeModel, self).__init__()
         self.stage = stage
         with stage:
-            # FIXME: it currently slices the list to workaround the mysterious
-            # (at least for me) rendering bug of TreeView.  It seems to
-            # get incorrectly rendered when there are more than about 50 items.
-            self.subscriptions = list(stage.subscriptions)[:40]
+            self.subscriptions = list(stage.subscriptions)
         self.subscriptions.sort(key=lambda o: (o.type, o.label.lower()))
 
     def make_iterator(self, index=0, return_model_iterator=False):

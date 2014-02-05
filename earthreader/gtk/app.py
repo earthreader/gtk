@@ -5,8 +5,8 @@ import uuid
 
 from gi.repository.GdkPixbuf import Pixbuf
 from gi.repository.Gtk import (Application, ApplicationWindow, Box,
-                               CellRendererText, ListStore, TreeStore,
-                               TreeView, TreeViewColumn)
+                               CellRendererText, ListStore, ScrolledWindow,
+                               TreeStore, TreeView, TreeViewColumn)
 from gi.repository.WebKit2 import WebView
 from libearth.repository import FileSystemRepository
 from libearth.session import Session
@@ -44,7 +44,7 @@ class EarthReaderApp(Application):
         self.window.set_default_size(600, 400)
         self.window.maximize()
         self.window.show_all()
-        self.window.content_view.load_uri('http://earthreader.org/')
+        self.window.content_view.load_uri('http://blog.earthreader.org/')
 
 
 class ReaderWindow(ApplicationWindow):
@@ -63,7 +63,8 @@ class ReaderWindow(ApplicationWindow):
         self.box = Box(spacing=0)
         self.add(self.box)
         subscriptions = SubscriptionTreeModel(app.stage)
-        self.subscriptions_sidebar = TreeView(subscriptions)
+        self.subscriptions_sidebar = ScrolledWindow()
+        self.subscription_list = TreeView(subscriptions)
         cell_renderer = CellRendererText()
         subscription_column = TreeViewColumn('Title', cell_renderer, text=0)
         def cell_data_func(tree_view_column, renderer, model, tree_iter, *args):
@@ -72,14 +73,17 @@ class ReaderWindow(ApplicationWindow):
             else:
                 renderer.set_property('cell-background', None)
         subscription_column.set_cell_data_func(cell_renderer, cell_data_func)
-        self.subscriptions_sidebar.append_column(subscription_column)
+        self.subscription_list.append_column(subscription_column)
+        self.subscriptions_sidebar.add(self.subscription_list)
         self.box.pack_start(self.subscriptions_sidebar,
                             expand=True, fill=True, padding=0)
         entries_store = dummy_entries()
         entry_column = TreeViewColumn('Title', CellRendererText(), text=0)
-        self.entry_list_view = TreeView(entries_store)
-        self.entry_list_view.append_column(entry_column)
-        self.box.pack_start(self.entry_list_view,
+        self.entry_list_box = ScrolledWindow()
+        self.entry_list = TreeView(entries_store)
+        self.entry_list.append_column(entry_column)
+        self.entry_list_box.add(self.entry_list)
+        self.box.pack_start(self.entry_list_box,
                             expand=True, fill=True, padding=0)
         self.content_view = WebView()
         self.box.pack_start(self.content_view,
