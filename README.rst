@@ -13,7 +13,12 @@ It's distributed under GPLv3_.
 Requirements
 ------------
 
-Install the following packages using APT:
+Install the following packages:
 
-- python3-gi
-- gir1.2-webkit
+Debian/Ubuntu
+   - python3-gi
+   - gir1.2-webkit2-3.0
+
+Fedora
+   - pygobject3
+   - webkitgtk3
