@@ -6,7 +6,7 @@ import uuid
 from gi.repository.GdkPixbuf import Pixbuf
 from gi.repository.Gtk import (Application, ApplicationWindow, Box,
                                CellRendererText, ListStore, ScrolledWindow,
-                               TreeStore, TreeView, TreeViewColumn)
+                               TreeView, TreeViewColumn)
 from gi.repository.WebKit2 import WebView
 from libearth.repository import FileSystemRepository
 from libearth.session import Session
@@ -88,17 +88,6 @@ class ReaderWindow(ApplicationWindow):
         self.content_view = WebView()
         self.box.pack_start(self.content_view,
                             expand=True, fill=True, padding=0)
-
-
-def dummy_feeds():
-    store = TreeStore(str, str)
-    mine = store.append(None, ('Mine', 'category'))
-    store.append(mine, ('Romantic Binaries', 'feed'))
-    store.append(mine, ('Referentially transparent', 'feed'))
-    friends = store.append(None, ('Friends', 'category'))
-    store.append(friends, ('Null Model', 'feed'))
-    store.append(friends, ('Mearie Journal', 'feed'))
-    return store
 
 
 def dummy_entries():

@@ -18,7 +18,7 @@ class SubscriptionTreeModel(Object, TreeModel):
           http://git.io/nspwyw
 
     """
- 
+
     __gtype_name__ = 'SubscriptionTreeModel'
 
     def __init__(self, stage):
