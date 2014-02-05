@@ -5,6 +5,7 @@
 from gi.repository.GObject import Object
 from gi.repository.Gtk import TreeIter, TreeModel, TreeModelFlags, TreePath
 from libearth.stage import Stage
+from libearth.subscribe import Category
 
 __all__ = 'SubscriptionTreeModel',
 
@@ -80,7 +81,9 @@ class SubscriptionTreeModel(Object, TreeModel):
         return False, None
 
     def do_iter_has_child(self, it):
-        return it is None
+        if it is None:
+            return True
+        return isinstance(self.subscriptions[it.user_data], Category)
 
     def do_iter_n_children(self, it):
         if it is None:
